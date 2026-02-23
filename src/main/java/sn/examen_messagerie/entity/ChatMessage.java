@@ -1,9 +1,16 @@
 package sn.examen_messagerie.entity;
 
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 
+@Entity
+@Table(name = "chatMessage")
 public class ChatMessage implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String action;
     private String sender;
     private String receiver;
@@ -22,6 +29,14 @@ public class ChatMessage implements Serializable {
         this.receiver = receiver;
         this.content = content;
         this.status = status;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getAction() {
