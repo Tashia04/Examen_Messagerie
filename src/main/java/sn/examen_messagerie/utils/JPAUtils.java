@@ -5,16 +5,20 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 public class JPAUtils {
-    private static final EntityManagerFactory emf =
-            Persistence.createEntityManagerFactory("PERSISTENCE");
+    private static final String PERSISTENCE_UTIL_NAME= "PERSISTENCE";
+    private static EntityManagerFactory factory;
 
-    public static EntityManager getEntityManager() {
-        return emf.createEntityManager();
+    public static EntityManagerFactory getEntityManagerFactory(){
+        if(factory == null){
+            factory = Persistence.createEntityManagerFactory(PERSISTENCE_UTIL_NAME);
+
+        }
+        return factory ;
     }
 
-    public static void close() {
-        if (emf != null && emf.isOpen()) {
-            emf.close();
+    public static void shutdown(){
+        if(factory != null){
+            factory.close();
         }
     }
 }
