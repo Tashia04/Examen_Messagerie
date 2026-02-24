@@ -13,10 +13,10 @@ public class ChatController {
         ClientHandler receiver = Server.connectedClients.get(msg.getReceiver());
 
         if (receiver != null) {
-            msg.setStatus(MessageStatus.RECU); // serveur marque comme reçu
+            msg.setStatut(MessageStatus.RECU); // serveur marque comme reçu
             receiver.sendMessage(msg);
         } else {
-            msg.setStatus(MessageStatus.ENVOYE); // destinataire offline, reste envoyé
+            msg.setStatut(MessageStatus.ENVOYE); // destinataire offline, reste envoyé
         }
     }
 
@@ -24,7 +24,7 @@ public class ChatController {
     public void markAsRead(ChatMessage msg) {
         ClientHandler sender = Server.connectedClients.get(msg.getSender());
         if (sender != null) {
-            msg.setStatus(MessageStatus.LU);
+            msg.setStatut(MessageStatus.LU);
             sender.sendMessage(msg); // Notifie l'expéditeur que le message a été lu
         }
     }

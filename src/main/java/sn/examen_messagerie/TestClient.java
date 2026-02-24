@@ -28,7 +28,7 @@ public class TestClient {
 
             // Essaie de lire la réponse
             ChatMessage response = (ChatMessage) in.readObject();
-            System.out.println("Réponse reçue : " + response.getStatus());
+            System.out.println("Réponse reçue : " + response.getStatut());
 
         } catch (Exception e) {
             e.printStackTrace();

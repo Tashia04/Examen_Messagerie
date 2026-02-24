@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<!-- Page principale du chat -->
+<BorderPane prefWidth="800" prefHeight="600"
+            style="-fx-background-color: #f0f2f5;"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="sn.examen_messagerie.controller.ChatViewController">
+
+    <!-- Barre du haut : nom d'utilisateur + bouton déconnexion -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10" prefHeight="50"
+              style="-fx-background-color: #128C7E; -fx-padding: 10;">
+            <Label fx:id="welcomeLabel" text="Bienvenue"
+                   style="-fx-text-fill: white; -fx-font-weight: bold;">
+                <font><Font size="16"/></font>
+            </Label>
+            <!-- Espace flexible pour pousser le bouton à droite -->
+            <HBox HBox.hgrow="ALWAYS"/>
+            <Button text="Déconnexion" onAction="#onLogout"
+                    style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;">
+            </Button>
+        </HBox>
+    </top>
+
+    <!-- Panneau gauche : liste des utilisateurs connectés -->
+    <left>
+        <VBox prefWidth="200" style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 0 1 0 0;">
+            <Label text="Utilisateurs en ligne" style="-fx-font-weight: bold; -fx-padding: 10; -fx-text-fill: #128C7E;">
+                <font><Font size="14"/></font>
+            </Label>
+            <ListView fx:id="userListView" VBox.vgrow="ALWAYS"
+                      style="-fx-background-color: white;">
+            </ListView>
+        </VBox>
+    </left>
+
+    <!-- Zone centrale : messages + champ d'envoi -->
+    <center>
+        <VBox>
+            <!-- Nom du contact sélectionné -->
+            <Label fx:id="contactLabel" text="Sélectionnez un utilisateur"
+                   style="-fx-padding: 10; -fx-background-color: #e8e8e8; -fx-font-weight: bold;">
+                <font><Font size="14"/></font>
+            </Label>
+
+            <!-- Zone des messages -->
+            <ListView fx:id="messageListView" VBox.vgrow="ALWAYS"
+                      style="-fx-background-color: #ECE5DD;">
+            </ListView>
+
+            <!-- Barre d'envoi de message -->
+            <HBox spacing="10" alignment="CENTER"
+                  style="-fx-padding: 10; -fx-background-color: #f0f2f5;">
+                <TextField fx:id="messageField" promptText="Tapez votre message..."
+                           HBox.hgrow="ALWAYS" prefHeight="35"
+                           onAction="#onSendMessage"
+                           style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: #ccc; -fx-font-size: 14;">
+                </TextField>
+                <Button text="Envoyer" onAction="#onSendMessage" prefHeight="35"
+                        style="-fx-background-color: #128C7E; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand; -fx-font-size: 13;">
+                </Button>
+            </HBox>
+        </VBox>
+    </center>
+
+</BorderPane>

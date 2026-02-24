@@ -3,33 +3,45 @@ package sn.examen_messagerie.entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
+// Entité Message : correspond au modèle de données du sujet
+// Sert aussi de message réseau (Serializable) pour le protocole client-serveur
 @Entity
-@Table(name = "chatMessage")
+@Table(name = "messages")
 public class ChatMessage implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String action;
-    private String sender;
-    private String receiver;
-    private String content;
-    private MessageStatus status;
 
-    // constructeurs, getters et setters
+    private String action;      // champ technique pour le protocole (login, send_message, etc.)
+    private String sender;      // expéditeur
+    private String receiver;    // destinataire
+    private String contenu;     // contenu du message
 
+    @Enumerated(EnumType.STRING)
+    private MessageStatus statut;   // statut du message (ENVOYE, RECU, LU)
 
+    private LocalDateTime dateEnvoi; // date d'envoi
+
+    // Constructeur vide (obligatoire pour JPA)
     public ChatMessage() {
     }
 
-    public ChatMessage(String action, String sender, String receiver, String content, MessageStatus status) {
+    // Constructeur complet
+    public ChatMessage(String action, String sender, String receiver, String contenu, MessageStatus statut) {
         this.action = action;
         this.sender = sender;
         this.receiver = receiver;
-        this.content = content;
-        this.status = status;
+        this.contenu = contenu;
+        this.statut = statut;
+        this.dateEnvoi = LocalDateTime.now();
     }
+
+    // ============ Getters et Setters ============
 
     public Long getId() {
         return id;
@@ -63,19 +75,27 @@ public class ChatMessage implements Serializable {
         this.receiver = receiver;
     }
 
-    public String getContent() {
-        return content;
+    public String getContenu() {
+        return contenu;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setContenu(String contenu) {
+        this.contenu = contenu;
     }
 
-    public MessageStatus getStatus() {
-        return status;
+    public MessageStatus getStatut() {
+        return statut;
     }
 
-    public void setStatus(MessageStatus status) {
-        this.status = status;
+    public void setStatut(MessageStatus statut) {
+        this.statut = statut;
+    }
+
+    public LocalDateTime getDateEnvoi() {
+        return dateEnvoi;
+    }
+
+    public void setDateEnvoi(LocalDateTime dateEnvoi) {
+        this.dateEnvoi = dateEnvoi;
     }
 }

@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "messages")
+// @Entity et @Table retirés : c'est ChatMessage qui gère la table "messages"
+// Cette classe est conservée comme modèle alternatif (non utilisée en base)
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,11 +49,17 @@ public class Message {
         this.statut = statut;
     }
 
-    public Message(User sender, User receiver, String content, LocalDateTime now) {
-
+    // Constructeur sans statut (statut par défaut : ENVOYE)
+    public Message(User sender, User receiver, String content, LocalDateTime dateEnvoi) {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.contenu = content;
+        this.dateEnvoi = dateEnvoi;
+        this.statut = MessageStatus.ENVOYE;
     }
 
+    // Permet de changer le statut du message (ENVOYE -> RECU -> LU)
     public void setStatus(MessageStatus messageStatus) {
-
+        this.statut = messageStatus;
     }
 }
