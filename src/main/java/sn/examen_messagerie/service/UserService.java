@@ -3,12 +3,14 @@ package sn.examen_messagerie.service;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
 import org.mindrot.jbcrypt.BCrypt;
 import sn.examen_messagerie.entity.Status;
 import sn.examen_messagerie.entity.User;
 import sn.examen_messagerie.utils.JPAUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class UserService {
     // Méthode pour trouver un utilisateur par username
@@ -20,6 +22,23 @@ public class UserService {
                     .getSingleResult();
         } catch (NoResultException e) {
             return null; // aucun utilisateur trouvé
+        } finally {
+            em.close();
+        }
+    }
+
+    /**
+     * Retourne la liste des utilisateurs marqués ONLINE en base.
+     * Utilisée par le serveur socket pour construire la liste
+     * des utilisateurs connectés dans l'interface de chat.
+     */
+    public List<User> findOnlineUsers() {
+        EntityManager em = JPAUtils.getEntityManagerFactory().createEntityManager();
+        try {
+            TypedQuery<User> query = em.createQuery(
+                    "SELECT u FROM User u WHERE u.status = :status", User.class);
+            query.setParameter("status", Status.ONLINE);
+            return query.getResultList();
         } finally {
             em.close();
         }

@@ -18,7 +18,6 @@ module examen.messagerie {
     exports sn.examen_messagerie.entity;
     exports sn.examen_messagerie.controller;
     exports sn.examen_messagerie.client;
-    exports sn.examen_messagerie.server;
     exports sn.examen_messagerie.service;
     exports sn.examen_messagerie.repository.impl;
 }
