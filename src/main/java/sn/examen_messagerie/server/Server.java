@@ -10,10 +10,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 // Serveur principal qui accepte les connexions des clients
 public class Server {
 
+    private static final Logger LOGGER = Logger.getLogger(Server.class.getName());
     private static final int PORT = 9000;
 
     // Liste globale des clients connectés (clé = username, valeur = handler)
@@ -26,21 +28,19 @@ public class Server {
 
     // Démarre le serveur et attend les connexions
     public void start() {
-        System.out.println("[SERVEUR] Démarré sur le port " + PORT);
+        LOGGER.info("Server started on port " + PORT);
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
 
             while (!threadPool.isShutdown()) {
-                // Attendre une nouvelle connexion client
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("[SERVEUR] Nouveau client : " + clientSocket.getInetAddress());
+                LOGGER.info("New client: " + clientSocket.getInetAddress());
 
-                // Lancer un thread pour ce client
                 threadPool.execute(new ClientHandler(clientSocket, userService));
             }
 
         } catch (IOException e) {
-            System.err.println("[SERVEUR] Erreur : " + e.getMessage());
+            LOGGER.severe("Server error: " + e.getMessage());
         } finally {
             shutdown();
         }
@@ -48,14 +48,12 @@ public class Server {
 
     // Envoyer la liste des utilisateurs connectés à tous les clients
     public static void broadcastUserList() {
-        // Construire la liste des usernames séparés par des virgules
         String users = String.join(",", connectedClients.keySet());
 
         ChatMessage userListMsg = new ChatMessage();
         userListMsg.setAction("user_list");
         userListMsg.setContenu(users);
 
-        // Envoyer à chaque client connecté
         for (ClientHandler handler : connectedClients.values()) {
             handler.sendMessage(userListMsg);
         }
@@ -63,7 +61,7 @@ public class Server {
 
     // Arrêter proprement le serveur
     private void shutdown() {
-        System.out.println("[SERVEUR] Arrêt...");
+        LOGGER.info("Server shutting down...");
         threadPool.shutdown();
     }
 

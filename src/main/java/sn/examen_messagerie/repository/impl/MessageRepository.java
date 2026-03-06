@@ -2,8 +2,7 @@ package sn.examen_messagerie.repository.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.NoResultException;
-import sn.examen_messagerie.entity.ChatMessage;
+import sn.examen_messagerie.entity.Message;
 import sn.examen_messagerie.entity.MessageStatus;
 import sn.examen_messagerie.utils.JPAUtils;
 
@@ -11,8 +10,8 @@ import java.util.List;
 
 public class MessageRepository {
 
-    // Sauvegarder un message
-    public void save(ChatMessage message) {
+    // Save a message to the database
+    public void save(Message message) {
         EntityManager em = JPAUtils.getEntityManagerFactory().createEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
@@ -27,49 +26,13 @@ public class MessageRepository {
         }
     }
 
-    // Récupérer tous les messages reçus par un utilisateur
-    public List<ChatMessage> findByReceiver(String receiver) {
-        EntityManager em = JPAUtils.getEntityManagerFactory().createEntityManager();
-        try {
-            return em.createQuery(
-                            "SELECT m FROM ChatMessage m WHERE m.receiver = :receiver", ChatMessage.class)
-                    .setParameter("receiver", receiver)
-                    .getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    // Récupérer tous les messages envoyés par un utilisateur
-    public List<ChatMessage> findBySender(String sender) {
-        EntityManager em = JPAUtils.getEntityManagerFactory().createEntityManager();
-        try {
-            return em.createQuery(
-                            "SELECT m FROM ChatMessage m WHERE m.sender = :sender", ChatMessage.class)
-                    .setParameter("sender", sender)
-                    .getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    // Récupérer un message par son ID
-    public ChatMessage findById(Long id) {
-        EntityManager em = JPAUtils.getEntityManagerFactory().createEntityManager();
-        try {
-            return em.find(ChatMessage.class, id);
-        } finally {
-            em.close();
-        }
-    }
-
-    // Mettre à jour le statut d'un message
+    // Update the status of a message (ENVOYE -> RECU -> LU)
     public void updateStatus(Long messageId, MessageStatus status) {
         EntityManager em = JPAUtils.getEntityManagerFactory().createEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            ChatMessage msg = em.find(ChatMessage.class, messageId);
+            Message msg = em.find(Message.class, messageId);
             if (msg != null) {
                 msg.setStatut(status);
                 em.merge(msg);
@@ -83,16 +46,15 @@ public class MessageRepository {
         }
     }
 
-    // Récupérer les messages entre deux utilisateurs (pour l'historique)
-    public List<ChatMessage> findBetweenUsers(String user1, String user2) {
+    // Retrieve messages between two users ordered by date (RG8)
+    public List<Message> findBetweenUsers(String user1, String user2) {
         EntityManager em = JPAUtils.getEntityManagerFactory().createEntityManager();
         try {
             return em.createQuery(
-                            "SELECT m FROM ChatMessage m WHERE " +
-                                    "((m.sender = :u1 AND m.receiver = :u2) OR " +
-                                    "(m.sender = :u2 AND m.receiver = :u1)) " +
-                                    "AND m.action = 'send_message' " +
-                                    "ORDER BY m.dateEnvoi ASC", ChatMessage.class)
+                            "SELECT m FROM Message m WHERE " +
+                                    "(m.sender.username = :u1 AND m.receiver.username = :u2) OR " +
+                                    "(m.sender.username = :u2 AND m.receiver.username = :u1) " +
+                                    "ORDER BY m.dateEnvoi ASC", Message.class)
                     .setParameter("u1", user1)
                     .setParameter("u2", user2)
                     .getResultList();
@@ -101,36 +63,17 @@ public class MessageRepository {
         }
     }
 
-    // Récupérer les messages en attente pour un utilisateur (messages hors ligne)
-    public List<ChatMessage> findPendingForUser(String username) {
+    // Retrieve pending messages for a user (offline messages, RG6)
+    public List<Message> findPendingForUser(String username) {
         EntityManager em = JPAUtils.getEntityManagerFactory().createEntityManager();
         try {
             return em.createQuery(
-                            "SELECT m FROM ChatMessage m WHERE m.receiver = :username " +
-                                    "AND m.statut = :status AND m.action = 'send_message' " +
-                                    "ORDER BY m.dateEnvoi ASC", ChatMessage.class)
+                            "SELECT m FROM Message m WHERE m.receiver.username = :username " +
+                                    "AND m.statut = :status " +
+                                    "ORDER BY m.dateEnvoi ASC", Message.class)
                     .setParameter("username", username)
                     .setParameter("status", MessageStatus.ENVOYE)
                     .getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    // Supprimer un message (optionnel)
-    public void delete(Long messageId) {
-        EntityManager em = JPAUtils.getEntityManagerFactory().createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        try {
-            tx.begin();
-            ChatMessage msg = em.find(ChatMessage.class, messageId);
-            if (msg != null) {
-                em.remove(msg);
-            }
-            tx.commit();
-        } catch (Exception e) {
-            if (tx.isActive()) tx.rollback();
-            e.printStackTrace();
         } finally {
             em.close();
         }

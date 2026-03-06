@@ -113,7 +113,8 @@ public class Client {
                 connected = false;
                 socket.close();
                 currentUser = null;
-                System.out.println("[CLIENT] Déconnecté");
+                instance = null;
+                System.out.println("[CLIENT] Disconnected");
             }
         } catch (Exception e) {
             System.err.println("[CLIENT] Erreur déconnexion : " + e.getMessage());

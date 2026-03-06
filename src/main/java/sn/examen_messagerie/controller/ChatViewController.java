@@ -178,6 +178,12 @@ public class ChatViewController implements Initializable {
             return;
         }
 
+        // RG7: message must not exceed 1000 characters
+        if (content.length() > 1000) {
+            messages.add("[INFO] Le message ne doit pas dépasser 1000 caractères");
+            return;
+        }
+
         // Envoyer le message au serveur
         ChatMessage msg = new ChatMessage("send_message", client.getCurrentUser(), selectedUser, content, null);
         client.send(msg);
