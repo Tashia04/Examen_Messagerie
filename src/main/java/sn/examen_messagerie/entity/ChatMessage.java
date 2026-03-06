@@ -3,7 +3,7 @@ package sn.examen_messagerie.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-// Network protocol object for client-server communication (not a JPA entity)
+// Objet protocole réseau pour la communication client-serveur (pas une entité JPA)
 public class ChatMessage implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -27,7 +27,7 @@ public class ChatMessage implements Serializable {
         this.dateEnvoi = LocalDateTime.now();
     }
 
-    // ============ Getters and Setters ============
+    // ============ Getters et Setters ============
 
     public String getAction() {
         return action;

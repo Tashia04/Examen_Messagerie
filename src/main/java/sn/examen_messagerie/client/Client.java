@@ -1,8 +1,6 @@
 package sn.examen_messagerie.client;
 
 import sn.examen_messagerie.entity.ChatMessage;
-import sn.examen_messagerie.entity.MessageStatus;
-
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -114,7 +112,7 @@ public class Client {
                 socket.close();
                 currentUser = null;
                 instance = null;
-                System.out.println("[CLIENT] Disconnected");
+                System.out.println("[CLIENT] Déconnecté");
             }
         } catch (Exception e) {
             System.err.println("[CLIENT] Erreur déconnexion : " + e.getMessage());
