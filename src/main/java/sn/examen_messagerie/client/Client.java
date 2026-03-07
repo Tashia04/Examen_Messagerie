@@ -1,8 +1,6 @@
 package sn.examen_messagerie.client;
 
 import sn.examen_messagerie.entity.ChatMessage;
-import sn.examen_messagerie.entity.MessageStatus;
-
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -113,6 +111,7 @@ public class Client {
                 connected = false;
                 socket.close();
                 currentUser = null;
+                instance = null;
                 System.out.println("[CLIENT] Déconnecté");
             }
         } catch (Exception e) {
