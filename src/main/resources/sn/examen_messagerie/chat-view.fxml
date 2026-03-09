@@ -12,6 +12,7 @@
 
 <!-- Page principale du chat -->
 <BorderPane prefWidth="800" prefHeight="600"
+            stylesheets="@whatsapp.css"
             style="-fx-background-color: #f0f2f5;"
             xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -48,14 +49,17 @@
     <!-- Zone centrale : messages + champ d'envoi -->
     <center>
         <VBox>
-            <!-- Nom du contact sélectionné -->
-            <Label fx:id="contactLabel" text="Sélectionnez un utilisateur"
-                   style="-fx-padding: 10; -fx-background-color: #e8e8e8; -fx-font-weight: bold;">
-                <font><Font size="14"/></font>
-            </Label>
+            <!-- Nom et statut du contact sélectionné -->
+            <VBox style="-fx-padding: 10; -fx-background-color: #e8e8e8;">
+                <Label fx:id="contactLabel" text="Sélectionnez un utilisateur" style="-fx-font-weight: bold;">
+                    <font><Font size="14"/></font>
+                </Label>
+                <Label fx:id="statusLabel" text="Hors ligne" style="-fx-text-fill: gray; -fx-font-size: 12;" />
+            </VBox>
 
             <!-- Zone des messages -->
             <ListView fx:id="messageListView" VBox.vgrow="ALWAYS"
+                      styleClass="chat-list"
                       style="-fx-background-color: #ECE5DD;">
             </ListView>
 

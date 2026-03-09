@@ -1,0 +1,46 @@
+/* WhatsApp CSS Design */
+
+.chat-list {
+    -fx-background-color: #ECE5DD;
+    -fx-control-inner-background: #ECE5DD;
+    -fx-control-inner-background-alt: #ECE5DD;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-selection-bar: transparent;
+    -fx-selection-bar-non-focused: transparent;
+}
+
+.chat-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 5;
+}
+
+.chat-list .list-cell:empty {
+    -fx-background-color: transparent;
+}
+
+.message-bubble-sent {
+    -fx-background-color: #dcf8c6;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
+}
+
+.message-bubble-received {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
+}
+
+.message-bubble-system {
+    -fx-background-color: #ffeeba;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
+}
+
+.chat-time {
+    -fx-font-size: 10px;
+    -fx-text-fill: gray;
+}
